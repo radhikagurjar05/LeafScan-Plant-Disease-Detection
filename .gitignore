@@ -1,0 +1,8 @@
+venv/
+backend/venv/
+data/
+dataset/
+*.h5
+*.pt
+*.csv
+*.zip
