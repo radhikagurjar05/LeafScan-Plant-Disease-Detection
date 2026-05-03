@@ -31,4 +31,4 @@ CREATE TABLE IF NOT EXISTS history (
 conn.commit()
 conn.close()
 
-print("✅ Database created successfully!")
+print("Database created successfully!")

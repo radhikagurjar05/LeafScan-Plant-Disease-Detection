@@ -21,7 +21,7 @@ CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 
 # ================= LOAD MODEL =================
-disease_model = tf.keras.models.load_model("plant_disease_model.h5", compile=False)
+disease_model = tf.keras.models.load_model("plant_disease_model.keras", compile=False)
 
 with open("classes.json", "r") as f:
     class_indices = json.load(f)
@@ -80,7 +80,7 @@ def predict():
         if not file:
             return jsonify({"error": "No file uploaded"})
 
-        # 🔥 Correct static path
+        #  Correct static path
         base_dir = os.path.dirname(os.path.abspath(__file__))
         static_folder = os.path.join(base_dir, "static")
 
@@ -97,11 +97,11 @@ def predict():
         filename = str(int(datetime.now().timestamp())) + ext
         filepath = os.path.join(static_folder, filename)
 
-        # 🔥 Save image
+        #  Save image
         file.save(filepath)
         print(" Saved:", filepath)
 
-        # 🔥 Read image from saved file
+        #  Read image from saved file
         img = Image.open(filepath).convert('RGB')
         img = img.resize((224, 224))
         img = np.array(img)
@@ -113,6 +113,9 @@ def predict():
         predicted_index = int(np.argmax(prediction))
         confidence = float(np.max(prediction)) * 100
 
+        if confidence < 50.0:
+            return jsonify({"error": "Invalid image, not leaf image"})
+
         predicted_class = classes.get(predicted_index, "Unknown Disease")
 
         info = disease_info.get(predicted_class, {})
@@ -120,7 +123,7 @@ def predict():
         return jsonify({
             "disease": predicted_class,
             "confidence": round(confidence, 2),
-            "image": filename,   # ✅ IMPORTANT
+            "image": filename,   #  IMPORTANT
             "treatment": info.get("treatment", "Not available"),
             "prevention": info.get("prevention", "Not available")
         })
@@ -206,7 +209,7 @@ def delete_history(id):
 
 # ================= AI CHAT =================
 
-# ✅ Handle preflight request (CORS FIX)
+#  Handle preflight request (CORS FIX)
 @app.route("/ask-ai", methods=["POST"])
 def ask_ai():
     try:

@@ -34,6 +34,12 @@ export default function Predict() {
 
       console.log("API RESULT:", response.data);
 
+      if (response.data.error) {
+        alert(response.data.error);
+        setLoading(false);
+        return;
+      }
+
       setResult(response.data);
 
       // 🔥 DEBUG (optional)
