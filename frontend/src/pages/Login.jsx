@@ -15,10 +15,20 @@ export default function Login() {
     try {
       const res = await login({ email, password });
 
+      console.log("LOGIN RESPONSE:", res); // debug
+
+      // ✅ FIXED (no res.data)
       if (res.status === "success") {
+        // store email
         localStorage.setItem("user", email);
-        alert("Login Successful");
-        navigate("/history");
+
+        // store name
+        const extractedName = email.split("@")[0];
+        localStorage.setItem("name", extractedName);
+
+        console.log("Saved name:", extractedName);
+
+        navigate("/"); // go to home
       } else {
         alert("Invalid Credentials");
       }
@@ -29,28 +39,37 @@ export default function Login() {
   };
 
   return (
-  <div className="login-container">
-    <div className="login-card">
-      <h2>🌿 LeafScan</h2>
-      <h3>Welcome</h3>
-      <p>Enter your details to get started</p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="logo">🌿 LeafScan</h2>
+        <h1>Continue to LeafScan</h1>
+        <p>Welcome back! Please enter your details.</p>
 
-      <input
-        type="email"
-        placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button onClick={handleLogin}>Get Started</button>
+        <button className="primary-btn" onClick={handleLogin}>
+          Login
+        </button>
+
+        <p className="signup-text">
+          New user?{" "}
+          <span onClick={() => navigate("/signup")}>
+            Sign Up
+          </span>
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 }

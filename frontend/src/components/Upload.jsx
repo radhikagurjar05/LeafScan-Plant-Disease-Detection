@@ -12,6 +12,7 @@ export default function UploadCard() {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("email", localStorage.getItem("user"));
 
     setLoading(true);
 

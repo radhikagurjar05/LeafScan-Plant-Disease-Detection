@@ -4,60 +4,84 @@ import UploadCard from "../components/UploadCard";
 import ResultCard from "../components/Resultcard";
 import Loader from "../components/Loader";
 
-
 export default function Predict() {
-
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
-  const [Loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const handlePredict = async () => {
+    if (!file) {
+      alert("Upload image first");
+      return;
+    }
 
-    if (!file) return alert("Upload image first");
-   try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const res = await axios.post(
-      "http://127.0.0.1:5000/predict",
-      formData
-    );
+      // 🔥 PREDICT API
+      const response = await axios.post(
+        "http://127.0.0.1:5000/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    setResult(res.data);
+      console.log("API RESULT:", response.data);
 
-  } catch (err){
-    console.error(err);
-    alert("Prediction failed. Please try again.");
-  } finally {
-    setLoading(false);
-  }
+      setResult(response.data);
+
+      // 🔥 DEBUG (optional)
+      console.log("SENDING TO HISTORY:", {
+        email: localStorage.getItem("user"),
+        disease: response.data.disease,
+        confidence: response.data.confidence,
+        image: response.data.image,
+      });
+
+      // 🔥 SAVE HISTORY
+      await axios.post("http://127.0.0.1:5000/save-history", {
+        email: localStorage.getItem("user"),
+        disease: response.data.disease || "Unknown",
+        confidence: response.data.confidence || 0,
+        image: response.data.image || "",
+        date: new Date().toLocaleString(),
+      });
+
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+      alert("Prediction failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
- return (
-  <div className="predict-page">
+  return (
+    <div className="predict-page">
+      <h1 className="predict-title">Scan Your Leaf</h1>
 
-    <h1 className="predict-title">Scan Your Leaf</h1>
+      <p className="predict-sub">
+        Drop a leaf image and our AI will analyze it
+      </p>
 
-    <p className="predict-sub">
-      Drop a leaf image and our AI will analyze it
-    </p>
+      {/* Upload Component */}
+      <UploadCard onFile={setFile} />
 
-    <UploadCard onFile={setFile} />
+      {/* Analyze Button */}
+      <button className="analyze-btn" onClick={handlePredict}>
+        🌿 Analyze Plant
+      </button>
 
-    <button className="analyze-btn" onClick={handlePredict}>
-      🌿 Analyze Planted 
-    </button>
+      {/* Loader */}
+      {loading && <Loader />}
 
-    {Loading && <Loader />}
-
-    {result && (
-      <>
-        <ResultCard result={result} />
-      </>
-    )}
-
-  </div>
-); 
+      {/* Result */}
+      {result && <ResultCard result={result} />}
+    </div>
+  );
 }

@@ -41,47 +41,47 @@ function Signup() {
   }
 
   return (
-    <div style={styles.container}>
-
-      <h2>Create Account</h2>
+  <div className="login-container">
+    <div className="login-card">
+      <h2>🌿 LeafScan</h2>
+      <h3>Create Account</h3>
+      <p>Sign up to get started</p>
 
       <input
         type="text"
-        placeholder="Name"
+        placeholder="Enter name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={styles.input}
       />
 
       <input
         type="email"
-        placeholder="Email"
+        placeholder="Enter email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
       />
 
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Enter password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
       />
 
-      <button onClick={handleSignup} style={styles.button}>
-        Sign Up
-      </button>
+      <button onClick={handleSignup}>Sign Up</button>
 
-      <p style={{ marginTop: "10px" }}>
+      <p>
         Already have an account?{" "}
-        <span style={styles.link} onClick={() => navigate("/login")}>
+        <span
+          style={{ color: "#4CAF50", cursor: "pointer" }}
+          onClick={() => navigate("/login")}
+        >
           Login
         </span>
       </p>
-
     </div>
-  )
+  </div>
+);
 }
 
 const styles = {

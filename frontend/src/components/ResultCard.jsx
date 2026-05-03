@@ -14,7 +14,6 @@ export default function ResultCard({ result }) {
 
   return (
     <div className="result-wrapper">
-
       <div className="result-card">
 
         <h2 className="result-title">🌿 Diagnosis Result</h2>
@@ -23,28 +22,29 @@ export default function ResultCard({ result }) {
 
           <div className="result-item">
             <h4>Disease</h4>
-            <p>{result.disease}</p>
+            <p>{result?.disease || "Unknown"}</p>
           </div>
 
           <div className="result-item">
             <h4>Confidence</h4>
-            <p>{(result.confidence * 100).toFixed(2)}%</p>
+            <p>
+              {result.confidence.toFixed(2)}
+            </p>
           </div>
 
           <div className="result-item full">
             <h4>Treatment</h4>
-            <p>{result.treatment}</p>
+            <p>{result?.treatment || "N/A"}</p>
           </div>
 
           <div className="result-item full">
             <h4>Prevention</h4>
-            <p>{result.prevention}</p>
+            <p>{result?.prevention || "N/A"}</p>
           </div>
 
         </div>
 
       </div>
-
     </div>
   );
 }

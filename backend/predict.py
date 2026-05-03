@@ -10,15 +10,17 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Load trained model (you must add your model file here)
+# ✅ Load model
 MODEL_PATH = "model.h5"
 
 if os.path.exists(MODEL_PATH):
     model = load_model(MODEL_PATH)
+    print("✅ Model loaded successfully")
 else:
     model = None
+    print("❌ Model file not found")
 
-# Class labels (change according to your dataset)
+# ✅ Class labels (adjust if needed)
 class_names = [
     "Leaf Blight",
     "Powdery Mildew",
@@ -26,7 +28,7 @@ class_names = [
     "Healthy"
 ]
 
-# Treatment dictionary
+# ✅ Treatments
 treatments = {
     "Leaf Blight": "Use fungicide and remove infected leaves",
     "Powdery Mildew": "Apply neem oil spray",
@@ -34,38 +36,61 @@ treatments = {
     "Healthy": "No treatment needed"
 }
 
+# ================== PREDICT ==================
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'image' not in request.files:
-        return jsonify({"error": "No image uploaded"})
+    try:
+        # ✅ FIXED: use "file" (matches frontend)
+        if 'file' not in request.files:
+            return jsonify({"error": "No file uploaded"})
 
-    file = request.files['image']
-    filepath = os.path.join("uploads", file.filename)
+        file = request.files['file']
 
-    os.makedirs("uploads", exist_ok=True)
-    file.save(filepath)
+        # Save image
+        os.makedirs("uploads", exist_ok=True)
+        filepath = os.path.join("uploads", file.filename)
+        file.save(filepath)
 
-    if model:
-        # Load image
-        img = image.load_img(filepath, target_size=(224, 224))
-        img_array = image.img_to_array(img)
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array = img_array / 255.0
+        print("📁 File received:", file.filename)
 
-        # Predict
-        predictions = model.predict(img_array)
-        predicted_class = class_names[np.argmax(predictions)]
-        confidence = float(np.max(predictions))
-    else:
-        # Fallback if no model
-        predicted_class = "Leaf Blight"
-        confidence = 0.85
+        # ✅ If model exists
+        if model:
+            img = image.load_img(filepath, target_size=(224, 224))
+            img_array = image.img_to_array(img)
 
-    return jsonify({
-        "disease": predicted_class,
-        "confidence": confidence,
-        "treatment": treatments[predicted_class]
-    })
+            # Normalize
+            img_array = img_array / 255.0
+            img_array = np.expand_dims(img_array, axis=0)
 
+            # Predict
+            predictions = model.predict(img_array)
+
+            print("🔥 Prediction:", predictions)
+
+            predicted_index = int(np.argmax(predictions))
+            confidence = float(np.max(predictions))
+
+            predicted_class = class_names[predicted_index]
+
+            # Safety
+            if confidence < 0.01:
+                predicted_class = "Unknown"
+
+        else:
+            # Fallback if model missing
+            predicted_class = "Leaf Blight"
+            confidence = 0.85
+
+        return jsonify({
+            "disease": predicted_class,
+            "confidence": confidence,
+            "treatment": treatments.get(predicted_class, "N/A")
+        })
+
+    except Exception as e:
+        print("❌ ERROR:", e)
+        return jsonify({"error": str(e)})
+
+# ================== RUN ==================
 if __name__ == '__main__':
     app.run(debug=True)

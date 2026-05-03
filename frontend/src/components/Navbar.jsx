@@ -1,46 +1,16 @@
-
-/**import { useNavigate } from "react-router-dom";
-
-export default function Navbar() {
-
-  const navigate = useNavigate();
-
-  return (
-    <div className="navbar">
-
-      <div className="logo" onClick={() => navigate("/")}>
-        🌿 LeafScan
-      </div>
-
-      <div className="nav-links">
-
-       
-        <Link href="#scan">Scan</Link>
-        <Link href="#how">How It Works</Link>
-        <Link href="#features">Features</Link>
-
-        
-        <Link to="/history">
-          History
-        </Link>
-
-      </div>
-
-      <div className="user">
-        Hi, Priyanshi
-        <button className="logout">Logout</button>
-      </div>
-
-    </div>
-  );
-}**/
-
-
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+
+  // get stored values
   const user = localStorage.getItem("user");
+  const name = localStorage.getItem("name");
+
+  // format name
+  const displayName = name
+    ? name.charAt(0).toUpperCase() + name.slice(1)
+    : "User";
 
   const goToSection = (id) => {
     navigate("/");
@@ -51,22 +21,19 @@ export default function Navbar() {
       }
     }, 100);
   };
-const handleLogout = () => {
-  localStorage.removeItem("user");   // remove user
-  window.location.href = "/";        // redirect to home
-};
-<button onClick={handleLogout}>
-  Logout
-</button>
-  const logout = () => {
+
+  const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("name");
     navigate("/login");
   };
 
   return (
     <div className="navbar">
       <div className="logo" onClick={() => navigate("/")}>
-        🌿 LeafScan
+        <h2 style={{ color: "white", fontWeight: "bold" }}>
+          🌿 LeafScan
+        </h2>
       </div>
 
       <div className="nav-links">
@@ -75,16 +42,16 @@ const handleLogout = () => {
         <span onClick={() => goToSection("why")}>Why LeafScan</span>
         <span onClick={() => navigate("/history")}>History</span>
       </div>
-<div className="nav-right">
-  <span>Hi, {user}</span>
 
-  {user ? (
-    <button onClick={handleLogout}>Logout</button>
-  ) : (
-    <button onClick={() => navigate("/login")}>Login</button>
-  )}
-</div>
-      
+      <div className="nav-right">
+        <span>Hi, {displayName}</span>
+
+        {user ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : (
+          <button onClick={() => navigate("/login")}>Login</button>
+        )}
+      </div>
     </div>
   );
 }

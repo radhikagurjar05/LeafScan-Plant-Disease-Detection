@@ -1,17 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
 export default function Index() {
-
   const navigate = useNavigate();
 
   return (
     <div>
 
-      
-
       {/* HERO */}
       <div className="hero">
-
         <div className="overlay">
 
           <h1>
@@ -32,14 +28,30 @@ export default function Index() {
       </div>
 
       {/* SCAN SECTION */}
-      <section id = "scan" className="scan">
+      <section id="scan" className="scan">
 
         <h2>Scan Your Leaf</h2>
         <p>Drop a leaf image below and our AI will analyze it.</p>
 
+        {/* ✅ FIXED UPLOAD BOX */}
         <div className="upload-box">
-          <p>📤 Drag & Drop your leaf image</p>
-          <span>JPG, PNG, WEBP</span>
+          <div className="upload-content">
+
+            <div className="upload-icon">📤</div>
+
+            <h3 className="upload-title">
+              Drag & Drop your leaf image
+            </h3>
+
+            <p className="upload-sub">
+              or click to browse
+            </p>
+
+            <span className="upload-format">
+              JPG, PNG • Max 10MB
+            </span>
+
+          </div>
         </div>
 
       </section>
@@ -107,10 +119,8 @@ export default function Index() {
 
       {/* FOOTER */}
       <footer>
-        © 2026 LeafScan. Helping plants thrive.
+        @ 2026 LeafScan. Helping plants thrive.
       </footer>
-
-      
 
     </div>
   );

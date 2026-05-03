@@ -1,8 +1,26 @@
 venv/
 backend/venv/
+
+# Env files (IMPORTANT 🔐)
+.env
+backend/.env
+
+# Database
+*.db
+
+# Static uploads (optional but recommended)
+backend/static/
+
+# ML / datasets
 data/
 dataset/
 *.h5
 *.pt
 *.csv
 *.zip
+
+# Node
+node_modules/
+
+# Python cache
+__pycache__/
