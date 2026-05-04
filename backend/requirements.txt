@@ -22,7 +22,6 @@ idna==3.13
 itsdangerous==2.2.0
 Jinja2==3.1.6
 jiter==0.14.0
-keras==3.14.0
 libclang==18.1.1
 markdown-it-py==4.0.0
 MarkupSafe==3.0.3
