@@ -6,7 +6,7 @@ export default function History() {
   // DELETE
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://127.0.0.1:5000/delete-history/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/delete-history/${id}`, {
         method: "DELETE",
       });
 
@@ -20,7 +20,7 @@ export default function History() {
   useEffect(() => {
     const email = localStorage.getItem("user");
 
-    fetch(`http://127.0.0.1:5000/history?email=${email}`)
+    fetch(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/history?email=${email}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("HISTORY DATA:", data);
@@ -46,7 +46,7 @@ export default function History() {
 
               {/* IMAGE */}
               <img
-                src={`http://127.0.0.1:5000/static/${item.image}`}
+                src={`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/static/${item.image}`}
                 alt="leaf"
                 className="history-img"
                 onError={(e) => (e.target.src = "/placeholder.png")}

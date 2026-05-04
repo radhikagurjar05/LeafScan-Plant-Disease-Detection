@@ -23,7 +23,7 @@ export default function Predict() {
 
       // 🔥 PREDICT API
       const response = await axios.post(
-        "http://127.0.0.1:5000/predict",
+        `${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/predict`,
         formData,
         {
           headers: {
@@ -51,7 +51,7 @@ export default function Predict() {
       });
 
       // 🔥 SAVE HISTORY
-      await axios.post("http://127.0.0.1:5000/save-history", {
+      await axios.post(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/save-history`, {
         email: localStorage.getItem("user"),
         disease: response.data.disease || "Unknown",
         confidence: response.data.confidence || 0,
