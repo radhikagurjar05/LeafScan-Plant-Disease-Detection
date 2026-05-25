@@ -50,14 +50,17 @@ export default function Predict() {
         image: response.data.image,
       });
 
-      // 🔥 SAVE HISTORY
-      await axios.post(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/save-history`, {
-        email: localStorage.getItem("user"),
-        disease: response.data.disease || "Unknown",
-        confidence: response.data.confidence || 0,
-        image: response.data.image || "",
-        date: new Date().toLocaleString(),
-      });
+      // 🔥 SAVE HISTORY (Only if logged in)
+      const loggedInUser = localStorage.getItem("user");
+      if (loggedInUser) {
+        await axios.post(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/save-history`, {
+          email: loggedInUser,
+          disease: response.data.disease || "Unknown",
+          confidence: response.data.confidence || 0,
+          image: response.data.image || "",
+          date: new Date().toLocaleString(),
+        });
+      }
 
     } catch (err) {
       console.error("❌ ERROR:", err);

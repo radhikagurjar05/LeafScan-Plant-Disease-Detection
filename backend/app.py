@@ -16,7 +16,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # ================= SETUP =================
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 
@@ -172,6 +172,10 @@ def get_history():
 def save_history():
     try:
         data = request.json
+        email = data.get("email")
+
+        if not email:
+            return jsonify({"error": "Email is required to save history"}), 400
 
         conn = sqlite3.connect("database.db")
 
@@ -179,7 +183,7 @@ def save_history():
             INSERT INTO history (user_email, disease, confidence, image, date)
             VALUES (?, ?, ?, ?, ?)
         """, (
-            data.get("email"),
+            email,
             data.get("disease"),
             data.get("confidence"),
             data.get("image"),
