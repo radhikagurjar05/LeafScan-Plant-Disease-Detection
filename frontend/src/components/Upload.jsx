@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import ResultCard from "../ResultCard";
+import ResultCard from "./ResultCard";
 
 export default function UploadCard() {
   const [file, setFile] = useState(null);

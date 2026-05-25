@@ -16,12 +16,24 @@ const AIChat = () => {
 
   // 🎤 Voice input
   const startListening = () => {
-    const recognition = new window.webkitSpeechRecognition();
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in your browser. Try using Google Chrome or Safari!");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
     recognition.lang = "en-IN";
 
     recognition.onresult = (event) => {
       const voiceText = event.results[0][0].transcript;
       setInput(voiceText);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
     };
 
     recognition.start();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import UploadCard from "../components/UploadCard";
-import ResultCard from "../components/Resultcard";
+import ResultCard from "../components/ResultCard";
 import Loader from "../components/Loader";
 
 export default function Predict() {

@@ -21,14 +21,19 @@ CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 
 # ================= LOAD MODEL =================
-disease_model = tf.keras.models.load_model("plant_disease_model.keras", compile=False)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_dir, "plant_disease_model.keras")
+classes_path = os.path.join(base_dir, "classes.json")
+info_path = os.path.join(base_dir, "disease_info.json")
 
-with open("classes.json", "r") as f:
+disease_model = tf.keras.models.load_model(model_path, compile=False)
+
+with open(classes_path, "r") as f:
     class_indices = json.load(f)
 
 classes = {v: k for k, v in class_indices.items()}
 
-with open("disease_info.json") as f:
+with open(info_path, "r") as f:
     disease_info = json.load(f)
 
 # ================= HOME =================
@@ -124,6 +129,8 @@ def predict():
             "disease": predicted_class,
             "confidence": round(confidence, 2),
             "image": filename,   #  IMPORTANT
+            "cause": info.get("cause", "Not available"),
+            "symptoms": info.get("symptoms", "Not available"),
             "treatment": info.get("treatment", "Not available"),
             "prevention": info.get("prevention", "Not available")
         })
