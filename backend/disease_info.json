@@ -1,172 +1,286 @@
 {
   "chili_cercospora": {
-    "cause": "Cercospora leaf spot is a fungal disease caused by Cercospora capsici. It spreads in warm and humid environments.",
+    "display_name": "Chili Cercospora Leaf Spot",
+    "cause": "Fungal disease caused by Cercospora capsici, spreading rapidly in warm, humid climates with frequent rain.",
     "symptoms": [
-      "Brown circular spots on leaves",
-      "Yellow halo around spots",
-      "Leaves dry and fall early"
+      "Circular brown spots with gray centers on leaves",
+      "Yellow haloid rings around infected leaf lesions",
+      "Premature leaf drying and defoliation"
     ],
-    "treatment": [
-      "Spray copper fungicide",
-      "Remove infected leaves",
-      "Maintain proper plant spacing"
-    ],
-    "prevention": [
-      "Avoid overhead irrigation",
-      "Use disease-free seeds",
-      "Ensure good air circulation"
-    ]
+    "pesticides": "Mancozeb 75% WP (2.5g/L water), Copper Oxychloride 50% WP (3g/L), or Chlorothalonil 75% WP.",
+    "organic_nutrients": "Neem Oil spray (5ml/L + soap), Trichoderma viride bio-fungicide, Vermicompost & Neem Cake in root zone.",
+    "inorganic_nutrients": "NPK 19-19-19 foliar spray (5g/L) for plant recovery, Calcium Nitrate to strengthen cell walls.",
+    "treatment": "Spray recommended fungicide immediately. Remove and destroy infected fallen leaves.",
+    "prevention": "Avoid overhead watering, maintain plant spacing for air flow, use certified disease-free seeds."
   },
 
   "chili_powdery_mildew": {
-    "cause": "Powdery mildew is a fungal disease caused by Leveillula taurica.",
+    "display_name": "Chili Powdery Mildew",
+    "cause": "Fungal infection by Leveillula taurica thriving in dry weather with high relative humidity.",
     "symptoms": [
-      "White powdery spots on leaves",
-      "Leaf curling",
-      "Reduced plant growth"
+      "White powdery coating on leaf lower surface",
+      "Yellowish patches on upper leaf surface",
+      "Upward curling and premature shedding of leaves"
     ],
-    "treatment": [
-      "Spray neem oil",
-      "Apply sulfur fungicide",
-      "Use potassium bicarbonate spray"
-    ],
-    "prevention": [
-      "Maintain proper sunlight",
-      "Avoid excess nitrogen fertilizer",
-      "Improve air circulation"
-    ]
+    "pesticides": "Wettable Sulphur 80% WP (3g/L), Hexaconazole 5% EC (1ml/L), or Dinocap.",
+    "organic_nutrients": "Potassium Bicarbonate spray (3g/L), Neem oil + baking soda solution, Sour buttermilk / whey spray (1:9 ratio).",
+    "inorganic_nutrients": "Micronutrient mixture spray (Zinc & Boron), Muriate of Potash (MOP) for leaf immunity.",
+    "treatment": "Apply sulfur or hexaconazole fungicide at early onset of white patches.",
+    "prevention": "Ensure good sunlight, avoid excessive nitrogen fertilizers, keep field weed-free."
   },
 
- "chili_mites_and_trips": {
-    "cause": "Mites and thrips insects feeding on chili plant sap.",
-    "symptoms": "Leaf curling, silvering of leaves, and stunted plant growth.",
-    "treatment": "Apply neem oil or recommended miticides/insecticides.",
-    "prevention": "Maintain proper plant hygiene and monitor pests regularly."
-  },
-
-"chili_healthy": {
-  "cause": "No disease detected; chili plant appears healthy.",
-  "symptoms": "Healthy green leaves and proper plant growth.",
-  "treatment": "No treatment required.",
-  "prevention": "Maintain balanced fertilization and regular watering."
-},
-
-"mango_anthracnose": {
-    "cause": "Anthracnose is a fungal disease caused by Colletotrichum gloeosporioides.",
+  "chili_mites_and_trips": {
+    "display_name": "Chili Mites & Thrips Attack",
+    "cause": "Microscopic sap-sucking pests (Polyphagotarsonemus latus and Scirtothrips dorsalis).",
     "symptoms": [
-      "Black spots on mango leaves",
-      "Dark lesions on fruit",
-      "Premature fruit drop"
+      "Downward leaf curling (Mites) or Upward leaf curling (Thrips)",
+      "Rough, silvery or bronze texture under leaves",
+      "Stunted growth and floral drop"
     ],
-    "treatment": [
-      "Spray copper oxychloride",
-      "Remove infected fruits",
-      "Apply carbendazim spray"
+    "pesticides": "Spiromesifen 22.9% SC (1ml/L for Mites), Fipronil 5% SC (1.5ml/L) or Imidacloprid 17.8% SL.",
+    "organic_nutrients": "Neem Seed Kernel Extract (NSKE 5%), Garlic-Chili extract spray, Blue & Yellow sticky traps.",
+    "inorganic_nutrients": "Zinc Sulphate (2g/L) + Ferrous Sulphate spray to overcome sap-loss chlorosis.",
+    "treatment": "Alternate miticide/insecticide sprays every 7-10 days to break pest lifecycle.",
+    "prevention": "Install yellow/blue sticky traps, spray neem oil regularly, maintain field hygiene."
+  },
+
+  "chili_healthy": {
+    "display_name": "Healthy Chili Plant",
+    "cause": "No disease detected; chili plant displays robust health.",
+    "symptoms": [
+      "Vibrant green leaves without discoloration",
+      "Healthy stems and active flowering/fruiting",
+      "Normal uncurled foliage"
     ],
-    "prevention": [
-      "Prune infected branches",
-      "Improve orchard sanitation",
-      "Avoid excessive humidity"
-    ]
+    "pesticides": "No chemical pesticide required.",
+    "organic_nutrients": "Panchagavya spray (3%), Vermicompost (200g/plant), Cow dung manure, Mustard cake tea.",
+    "inorganic_nutrients": "Balanced NPK 19-19-19 (3g/L), Epsom salt (Magnesium Sulphate 2g/L) for lush greening.",
+    "treatment": "No treatment needed. Continue standard agricultural care.",
+    "prevention": "Maintain scheduled irrigation, balanced nutrition, and routine crop scouting."
   },
 
-"mango_sooty_mould": {
-    "cause": "Fungal growth that develops on honeydew secreted by insects such as aphids or scale insects.",
-    "symptoms": "Black powdery coating on mango leaves and branches.",
-    "treatment": "Wash leaves with mild soap solution and control insect pests.",
-    "prevention": "Manage aphids and other sap-sucking insects early."
-  },
-
-  "mango_healthy": {
-    "cause": "No disease detected; mango plant is healthy.",
-    "symptoms": "Green healthy leaves and normal plant development.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain balanced fertilization and proper irrigation."
-  },
-
-  "mango_powdery_mildew": {
-    "cause": "Fungal disease caused by Oidium mangiferae.",
-    "symptoms": "White powder-like growth on leaves, flowers, and fruits.",
-    "treatment": "Spray sulfur fungicide or potassium bicarbonate solution.",
-    "prevention": "Ensure proper air circulation and avoid high humidity conditions."
-  },
-
-  "mango_gall_midge": {
-    "cause": "Insect larvae that feed inside mango leaf tissues.",
-    "symptoms": "Leaf galls or swelling, distorted leaves, and reduced photosynthesis.",
-    "treatment": "Use recommended insecticides and prune affected leaves.",
-    "prevention": "Regular monitoring and removal of infected leaves."
-  },
-
-  "mango_die_back": {
-    "cause": "Fungal disease that attacks mango branches and shoots.",
-    "symptoms": "Drying of twigs and branches starting from the tip.",
-    "treatment": "Prune infected branches and apply copper fungicide.",
-    "prevention": "Maintain tree hygiene and avoid water stress."
-  },
-
-  "mango_cutting_weevil": {
-    "cause": "Weevil insects that damage mango leaves and stems.",
-    "symptoms": "Small holes in leaves and damaged plant tissues.",
-    "treatment": "Apply neem oil spray or recommended insecticides.",
-    "prevention": "Monitor orchards regularly and maintain field sanitation."
+  "mango_anthracnose": {
+    "display_name": "Mango Anthracnose",
+    "cause": "Fungal pathogen Colletotrichum gloeosporioides spread by rain splashes and high humidity.",
+    "symptoms": [
+      "Dark brown to black angular spots on leaves",
+      "Blossom blight and dark sunken lesions on fruits",
+      "Tear-staining pattern on developing mangoes"
+    ],
+    "pesticides": "Copper Oxychloride 50% WP (3g/L), Carbendazim 50% WP (1g/L), or Azoxystrobin 23% SC.",
+    "organic_nutrients": "Pseudomonas fluorescens (5g/L spray), Neem cake applied around tree basin, Bio-compost.",
+    "inorganic_nutrients": "Potassium Nitrate (NPK 13-0-45 10g/L) to boost fruit set, Boron (1.5g/L).",
+    "treatment": "Prune dead twigs before monsoon and spray Copper Oxychloride or Carbendazim.",
+    "prevention": "Destroy fallen leaves and fruits, maintain tree canopy ventilation through pruning."
   },
 
   "mango_bacterial_canker": {
-    "cause": "Bacterial infection caused by Xanthomonas species.",
-    "symptoms": "Black lesions on leaves and fruit spots with cracks.",
-    "treatment": "Apply copper-based bactericides and remove infected parts.",
-    "prevention": "Use disease-free planting material and avoid plant injury."
+    "display_name": "Mango Bacterial Canker",
+    "cause": "Bacterial pathogen Xanthomonas citri pv. mangiferaeindicae.",
+    "symptoms": [
+      "Water-soaked dark brown spots on leaves with yellow halos",
+      "Cankerous raised cracks on stems and twigs",
+      "Gummy exudation and dark star-shaped fruit cracks"
+    ],
+    "pesticides": "Streptocycline (1g/10L water) mixed with Copper Oxychloride (2.5g/L).",
+    "organic_nutrients": "Cow dung slurry spray (filtered), Trichoderma harzianum soil application, Humic acid granules.",
+    "inorganic_nutrients": "Zinc Sulphate (2g/L) & Calcium Chloride (3g/L) spray to strengthen plant tissue.",
+    "treatment": "Spray Streptocycline + Copper fungicide twice at 15-day intervals.",
+    "prevention": "Avoid mechanical injury to trees, use disease-free nursery grafts, sanitize pruning tools."
   },
 
-
-  "potato_nematode": {
-    "cause": "Root-knot nematodes infect potato roots and damage plant growth.",
-    "symptoms": "Yellowing leaves, stunted growth, root galls and reduced yield.",
-    "treatment": "Apply neem cake or recommended nematicides. Use biological control agents like Paecilomyces lilacinus.",
-    "prevention": "Use crop rotation, resistant potato varieties, and maintain healthy soil."
+  "mango_cutting_weevil": {
+    "display_name": "Mango Leaf Cutting Weevil",
+    "cause": "Deporaus marginatus weevil cutting young reddish tender mango leaves.",
+    "symptoms": [
+      "Freshly cut young leaves hanging or found on ground",
+      "Semicircular cuts on leaf margins",
+      "Loss of new vegetative flushes"
+    ],
+    "pesticides": "Chlorpyrifos 20% EC (2ml/L) or Quinalphos 25% EC (2ml/L) sprayed on new leaf flush.",
+    "organic_nutrients": "Beauveria bassiana bio-insecticide (5g/L), Neem oil 10,000 PPM (3ml/L), Wood ash at tree base.",
+    "inorganic_nutrients": "Complex NPK 10-26-26 (500g/tree), Single Super Phosphate (SSP) for root vigor.",
+    "treatment": "Spray recommended insecticide as soon as new reddish leaf flushes emerge.",
+    "prevention": "Collect and burn fallen cut leaves containing weevil eggs, rake soil under canopy."
   },
 
-  "potato_pest": {
-    "cause": "Potato pests such as aphids, beetles, and caterpillars feed on leaves and stems.",
-    "symptoms": "Holes in leaves, yellowing foliage, visible insects, and damaged plant growth.",
-    "treatment": "Apply neem oil spray or recommended insecticides. Remove infected plant parts.",
-    "prevention": "Regular field inspection, crop rotation, and use pest-resistant potato varieties."
+  "mango_die_back": {
+    "display_name": "Mango Die-Back Disease",
+    "cause": "Fungal disease caused by Lasiodiplodia theobromae infecting pruned or injured branches.",
+    "symptoms": [
+      "Drying of twigs and branches starting from top downwards",
+      "Leaves turn brown, roll, and remain attached to dead twigs",
+      "Internal browning of stem tissue"
+    ],
+    "pesticides": "Prune affected twigs 2-3 inches below dead area and apply Bordeaux paste (10%) or Copper Oxychloride paste.",
+    "organic_nutrients": "Trichoderma viride bio-fertilizer in soil, Well-rotted Farmyard Manure (FYM 50kg/tree).",
+    "inorganic_nutrients": "Sulphate of Potash (SOP 500g/tree), Micronutrient mix containing Zinc, Manganese & Iron.",
+    "treatment": "Cut infected branches cleanly and immediately coat cut ends with copper paste.",
+    "prevention": "Avoid branch injury during harvesting, paint trunk with lime-copper paste before monsoon."
   },
 
-  "potato_phytophthora": {
-    "cause": "Late blight caused by the fungus-like organism Phytophthora infestans.",
-    "symptoms": "Dark brown patches on leaves, white fungal growth under leaves, rapid plant decay.",
-    "treatment": "Spray fungicides such as metalaxyl or chlorothalonil.",
-    "prevention": "Avoid excessive moisture, maintain good plant spacing, and remove infected plants."
+  "mango_gall_midge": {
+    "display_name": "Mango Gall Midge",
+    "cause": "Procontarinia spp. midge flies laying eggs inside young leaf tissues.",
+    "symptoms": [
+      "Wart-like small galls or pimple swells on leaves",
+      "Leaf distortion, shot-holes, and premature leaf fall",
+      "Reduced tree photosynthesis"
+    ],
+    "pesticides": "Dimethoate 30% EC (1.5ml/L) or Imidacloprid 17.8% SL (0.5ml/L) at flush stage.",
+    "organic_nutrients": "Metarhizium anisopliae bio-pesticide, Neem cake application in basin (2kg/tree).",
+    "inorganic_nutrients": "Urea (nitrogen for new leaf regrowth), Magnesium Sulphate for chlorophyll synthesis.",
+    "treatment": "Spray systemic insecticide when new leaf buds begin unfolding.",
+    "prevention": "Deep plow tree basins in summer to destroy pupae in soil, prune heavily infested branches."
   },
 
-  "potato_virus": {
-    "cause": "Plant viruses transmitted mainly by aphids and infected planting material.",
-    "symptoms": "Mosaic leaf patterns, leaf curling, stunted plant growth, reduced yield.",
-    "treatment": "There is no cure for viral infection; remove infected plants immediately.",
-    "prevention": "Use certified disease-free seeds and control aphid populations."
+  "mango_healthy": {
+    "display_name": "Healthy Mango Tree",
+    "cause": "No infection found; mango leaves are vigorous and disease-free.",
+    "symptoms": [
+      "Deep green, glossy leathery foliage",
+      "Strong terminal buds and healthy canopy structure",
+      "No spots, galls, or powdery patches"
+    ],
+    "pesticides": "No chemical pesticide required.",
+    "organic_nutrients": "Well-rotted FYM (50kg/tree), Neem Cake (3kg/tree), Bio-fertilizers (Azospirillum & PSB).",
+    "inorganic_nutrients": "NPK 10-26-26 (1-2 kg/tree based on age), Micronutrient foliar spray before flowering.",
+    "treatment": "No corrective treatment needed.",
+    "prevention": "Follow annual fertilization cycle post-harvest, maintain orchard sanitation."
   },
 
-  "potato_healthy": {
-    "cause": "No disease detected; plant appears healthy.",
-    "symptoms": "Healthy green leaves and normal plant growth.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper irrigation, sunlight exposure, and soil nutrition."
+  "mango_powdery_mildew": {
+    "display_name": "Mango Powdery Mildew",
+    "cause": "Oidium mangiferae fungal parasite damaging inflorescences and leaves during cool dry nights.",
+    "symptoms": [
+      "White powdery coating on flowers, panicles, and tender leaves",
+      "Browning and dropping of flowers (Blossom drop)",
+      "Deformed, crinkled young leaves"
+    ],
+    "pesticides": "Wettable Sulphur 80% WP (3g/L), Hexaconazole 5% EC (1ml/L), or Myclobutanil 10% WP.",
+    "organic_nutrients": "Potassium Bicarbonate (3g/L) + Neem Oil, Sour cow milk whey solution.",
+    "inorganic_nutrients": "Potassium Nitrate (13-0-45 5g/L) for fruit retention, Soluble Boron.",
+    "treatment": "Spray Wettable Sulphur or Hexaconazole at panicle emergence and fruit set stage.",
+    "prevention": "Prune dense inner branches to permit sunlight penetration into canopy."
   },
 
-  "potato_fungi": {
-    "cause": "Fungal infections caused by soilborne fungi affecting potato plants.",
-    "symptoms": "Leaf spots, discoloration, wilting, and rotting of plant tissues.",
-    "treatment": "Apply recommended fungicides and remove infected plant parts.",
-    "prevention": "Practice crop rotation and avoid excessive soil moisture."
+  "mango_sooty_mould": {
+    "display_name": "Mango Sooty Mould",
+    "cause": "Capnodium mangiferae fungus growing on honeydew excreted by aphids, scales, or mealybugs.",
+    "symptoms": [
+      "Black velvety charcoal-like layer covering leaves and twigs",
+      "Stunted growth due to blocked sunlight and reduced photosynthesis",
+      "Flakes of black crust peeling off dried leaves"
+    ],
+    "pesticides": "Spray Starch solution (1kg wheat flour boiled in 5L water, diluted to 20L water) to peel off mould. Spray Imidacloprid (0.5ml/L) to kill honeydew insects.",
+    "organic_nutrients": "Neem oil (5ml/L) + Soft potassic soap spray, Vermicompost in basin.",
+    "inorganic_nutrients": "NPK 19-19-19 (4g/L) foliar spray after cleaning black mould layer.",
+    "treatment": "First kill sap-sucking insects with insecticide/neem oil, then apply starch spray to flake off black layer.",
+    "prevention": "Control hoppers, aphids, and scale insects early in the season."
   },
 
   "potato_bacteria": {
-    "cause": "Bacterial pathogens infect potato plants through wounds or contaminated soil.",
-    "symptoms": "Soft rot, black stem lesions, wilting leaves, and foul odor in infected tissue.",
-    "treatment": "Remove infected plants and apply copper-based bactericides.",
-    "prevention": "Use certified seeds and maintain proper field sanitation."
+    "display_name": "Potato Bacterial Wilt / Soft Rot",
+    "cause": "Ralstonia solanacearum or Pectobacterium species infecting vascular system.",
+    "symptoms": [
+      "Rapid wilting of leaves during warm day hours",
+      "Stems show dark brown vascular ring discoloration",
+      "Soft, foul-smelling rot inside potato tubers"
+    ],
+    "pesticides": "Copper Hydroxide 77% WP (2g/L) or Streptocycline (1g/10L) for seed tuber treatment.",
+    "organic_nutrients": "Pseudomonas fluorescens (10g/kg seed treatment), Mustard oil cake, Vermicompost.",
+    "inorganic_nutrients": "Calcium Nitrate (5g/L) to reinforce plant cell walls against bacterial enzymes, Potassium Sulphate.",
+    "treatment": "Rogue out and destroy infected plants immediately. Drench surrounding soil with copper solution.",
+    "prevention": "Plant certified disease-free seed tubers, practice 3-year crop rotation with non-solanaceous crops."
+  },
+
+  "potato_fungi": {
+    "display_name": "Potato Fungal Disease (Early Blight / Fusarium)",
+    "cause": "Alternaria solani or Fusarium species causing foliar leaf spot and wilt.",
+    "symptoms": [
+      "Target-board concentric brown rings on older leaves",
+      "Yellowing surrounding dark brown circular spots",
+      "Dry rot and leaf shriveling"
+    ],
+    "pesticides": "Mancozeb 75% WP (2.5g/L), Chlorothalonil 75% WP (2g/L), or Difenoconazole 25% EC.",
+    "organic_nutrients": "Trichoderma viride bio-fungicide (5g/L), Neem oil 10,000 PPM, Bio-fertilizers (VAM / Mycorrhiza).",
+    "inorganic_nutrients": "NPK 12-61-0 (Mono Ammonium Phosphate 4g/L) for leaf recovery, Zinc Sulphate (2g/L).",
+    "treatment": "Apply Mancozeb or Difenoconazole spray at first sight of target-ring spots.",
+    "prevention": "Avoid nitrogen deficiency, maintain proper plant spacing, eliminate solanaceous weeds."
+  },
+
+  "potato_healthy": {
+    "display_name": "Healthy Potato Crop",
+    "cause": "No pathogen detected; potato foliage is thriving with healthy green vigor.",
+    "symptoms": [
+      "Uniform deep green leaf canopy without spots or curling",
+      "Sturdy upright stems",
+      "Healthy root and stolon development"
+    ],
+    "pesticides": "No chemical pesticide needed.",
+    "organic_nutrients": "Well-decomposed compost (10 tons/acre), Vermicompost, Neem cake, Bone meal.",
+    "inorganic_nutrients": "NPK 10-26-26 (at earthing up), Magnesium Sulphate (Epsom salt 3g/L) for tuber starch boost.",
+    "treatment": "No treatment required.",
+    "prevention": "Maintain regular hilling/earthing up, balanced soil moisture, and pest monitoring."
+  },
+
+  "potato_nematode": {
+    "display_name": "Potato Cyst / Root-Knot Nematode",
+    "cause": "Microscopic soil nematodes (Meloidogyne spp. or Globodera spp.) attacking roots.",
+    "symptoms": [
+      "Stunted growth, patchiness in potato field",
+      "Yellowing leaves resembling nutrient deficiency",
+      "Small galls or tiny cyst swellings on roots and small tubers"
+    ],
+    "pesticides": "Fluopyram 400 SC (Velum Prime 1ml/2L) or Cartap Hydrochloride 4% Granules in soil.",
+    "organic_nutrients": "Neem cake application (250 kg/acre), Purpureocillium lilacinum bio-agent, Marigold green manure.",
+    "inorganic_nutrients": "High Potash NPK 0-0-50 (Sulfate of Potash 5g/L) for tuber weight & stress tolerance.",
+    "treatment": "Apply bio-nematicide or Fluopyram drench around plant base.",
+    "prevention": "Rotate crops with Marigold (Tagetes), apply Neem cake generously during soil preparation."
+  },
+
+  "potato_pest": {
+    "display_name": "Potato Pest Attack (Aphids / Beetles / Cutworms)",
+    "cause": "Insects feeding on potato foliage and transmitting viral pathogens.",
+    "symptoms": [
+      "Visible holes, chewed leaf margins, or skeletonized foliage",
+      "Clusters of green/black aphids under leaves",
+      "Curled sticky leaves covered with honeydew"
+    ],
+    "pesticides": "Thiamethoxam 25% WG (0.5g/L), Chlorantraniliprole 18.5% SC (0.4ml/L), or Acephate 75% SP.",
+    "organic_nutrients": "Neem Seed Kernel Extract (NSKE 5%), Beauveria bassiana (5g/L), Yellow sticky cards.",
+    "inorganic_nutrients": "NPK 19-19-19 (3g/L) + Micronutrient mix (Iron, Zinc, Manganese) for tissue repair.",
+    "treatment": "Spray Thiamethoxam or Acephate to control sap-sucking aphids and leaf beetles.",
+    "prevention": "Install yellow sticky traps (20/acre), monitor crop weekly, eliminate field weeds."
+  },
+
+  "potato_phytophthora": {
+    "display_name": "Potato Late Blight (Phytophthora Infestans)",
+    "cause": "Destructive oomycete pathogen Phytophthora infestans favoured by cool, foggy, wet weather.",
+    "symptoms": [
+      "Water-soaked dark brown to black lesions on leaf tips and margins",
+      "White cottony fungal downy growth on underside of leaves in humid mornings",
+      "Rapid foliage destruction and brown rotting tubers"
+    ],
+    "pesticides": "Systemic fungicide: Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold 2.5g/L), Dimethomorph 50% WP (1g/L), or Cymoxanil + Mancozeb.",
+    "organic_nutrients": "Bordeaux Mixture (1% spray), Trichoderma harzianum soil treatment, Organic Seaweed Extract.",
+    "inorganic_nutrients": "Calcium Nitrate + Boron (5g/L) to strengthen plant cell walls against zoospores.",
+    "treatment": "Spray Ridomil Gold or Dimethomorph immediately upon first symptom; repeat in 7 days if wet weather continues.",
+    "prevention": "Destroy volunteer potato plants, avoid flood irrigation, plant resistant cultivars."
+  },
+
+  "potato_virus": {
+    "display_name": "Potato Virus Infection (PVY / Mosaic Virus)",
+    "cause": "Viral pathogens transmitted by aphid vector insects and infected seed tubers.",
+    "symptoms": [
+      "Mosaic light and dark green leaf mottle patterns",
+      "Leaf crinkling, puckering, and downward rolling",
+      "Stunted vine growth and severe tuber yield reduction"
+    ],
+    "pesticides": "No chemical cure exists for viral infection. Spray Systemic Insecticide (Acetamiprid 20% SP 0.5g/L or Imidacloprid) to eliminate aphid vector insects.",
+    "organic_nutrients": "Neem Oil 10,000 PPM (3ml/L) to deter aphids, Humic Acid + Seaweed Extract for vine vigor.",
+    "inorganic_nutrients": "Sulphate of Potash (SOP 0-0-50 5g/L) + Zinc Sulphate to support surviving green foliage.",
+    "treatment": "Rogue out (dig up and burn) infected virus plants to prevent spread to surrounding healthy crop.",
+    "prevention": "Always use certified virus-free seed tubers, control aphid populations early with sticky traps."
   }
 }
-

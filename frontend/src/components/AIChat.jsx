@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const AIChat = () => {
   const [open, setOpen] = useState(false);
@@ -6,6 +6,27 @@ const AIChat = () => {
   const [messages, setMessages] = useState([
     { role: "ai", text: "Hi! I'm your plant assistant 🌱" },
   ]);
+
+  const chatRef = useRef(null);
+
+  // 🖱️ Close chat box when clicking anywhere outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (chatRef.current && !chatRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [open]);
 
   // 🔊 Speak AI response
   const speak = (text) => {
@@ -75,6 +96,12 @@ const AIChat = () => {
     setInput("");
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <>
       {!open && (
@@ -84,7 +111,7 @@ const AIChat = () => {
       )}
 
       {open && (
-        <div className="chat-box">
+        <div className="chat-box" ref={chatRef}>
 
           {/* Header */}
           <div className="chat-header">
@@ -111,6 +138,7 @@ const AIChat = () => {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Type or speak..."
             />
 

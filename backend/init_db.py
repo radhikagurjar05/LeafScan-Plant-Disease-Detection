@@ -1,7 +1,12 @@
 import sqlite3
-import json
+import os
+
+# Get absolute path to the directory containing this script
+base_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(base_dir, "database.db")
+
 # Connect to database
-conn = sqlite3.connect("database.db")
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 # Create users table
@@ -27,8 +32,17 @@ CREATE TABLE IF NOT EXISTS history (
 )
 """)
 
+# Create login_attempts table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS login_attempts (
+    email TEXT PRIMARY KEY,
+    attempts INTEGER DEFAULT 0,
+    locked_until TEXT
+)
+""")
+
 # Save changes
 conn.commit()
 conn.close()
 
-print("Database created successfully!")
+print("Database initialized successfully!")

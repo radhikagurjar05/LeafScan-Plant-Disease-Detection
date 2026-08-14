@@ -1,40 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
+import { isValidEmail } from "../utils/helpers";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      return alert("Please enter email and password");
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault();
+    setErrorMsg("");
+
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
+      setErrorMsg("Please enter both email and password.");
+      return;
+    }
+
+    if (!isValidEmail(cleanEmail)) {
+      setErrorMsg("Please enter a valid email address (e.g. name@example.com).");
+      return;
     }
 
     try {
-      const res = await login({ email, password });
+      setLoading(true);
+      const res = await login({ email: cleanEmail, password: cleanPassword });
 
-      console.log("LOGIN RESPONSE:", res); // debug
-
-      // ✅ FIXED (no res.data)
       if (res.status === "success") {
-        // store email
-        localStorage.setItem("user", email);
-
-        // store name
-        const extractedName = email.split("@")[0];
-        localStorage.setItem("name", extractedName);
-
-        console.log("Saved name:", extractedName);
-
-        navigate("/"); // go to home
+        localStorage.setItem("user", res.user.email);
+        localStorage.setItem("name", res.user.name);
+        navigate("/");
       } else {
-        alert("Invalid Credentials");
+        setErrorMsg(res.message || "Invalid email or password.");
       }
     } catch (err) {
-      console.error(err);
-      alert("Login failed");
+      console.error("Login Error:", err);
+      const serverMsg = err.response?.data?.message;
+      setErrorMsg(serverMsg || "Login failed. Please check your credentials or server connection.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,23 +54,29 @@ export default function Login() {
         <h1>Continue to LeafScan</h1>
         <p>Welcome back! Please enter your details.</p>
 
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {errorMsg && <div className="auth-error-box">{errorMsg}</div>}
 
-        <input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+          />
 
-        <button className="primary-btn" onClick={handleLogin}>
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
+          />
+
+          <button className="primary-btn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
 
         <p className="signup-text">
           New user?{" "}

@@ -1,116 +1,108 @@
-import { useState } from "react"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signup } from "../services/authService";
+import { isValidEmail } from "../utils/helpers";
 
-import { isValidEmail } from "../utils/helpers"
+export default function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const handleSignup = async (e) => {
+    if (e) e.preventDefault();
+    setErrorMsg("");
 
-function Signup() {
+    const cleanName = name.trim();
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-
-  const navigate = useNavigate()
-
-  const handleSignup = async () => {
-
-    if (!name || !email || !password) {
-      return alert("Please fill all fields")
+    if (!cleanName || !cleanEmail || !cleanPassword) {
+      setErrorMsg("Please fill in all fields.");
+      return;
     }
-    
-    if (!isValidEmail(email)) {
-      alert("Invalid Email")
+
+    if (!isValidEmail(cleanEmail)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
     }
+
+    if (cleanPassword.length < 4) {
+      setErrorMsg("Password should be at least 4 characters.");
+      return;
+    }
+
     try {
+      setLoading(true);
+      const res = await signup({
+        name: cleanName,
+        email: cleanEmail,
+        password: cleanPassword,
+      });
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || "http://127.0.0.1:5000"}/signup`, {
-        name,
-        email,
-        password
-      })
-
-      alert("Signup Successful ✅")
-
-      navigate("/login")
-
+      if (res.status === "success") {
+        alert("Signup Successful! ✅ Please login with your email.");
+        navigate("/login");
+      } else {
+        setErrorMsg(res.message || "Signup failed.");
+      }
     } catch (err) {
-      console.error(err)
-      alert("Signup failed ❌ (Email may already exist)")
+      console.error(err);
+      const serverMsg = err.response?.data?.message;
+      setErrorMsg(serverMsg || "This email is already registered! Please login instead.");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-  <div className="login-container">
-    <div className="login-card">
-      <h2>🌿 LeafScan</h2>
-      <h3>Create Account</h3>
-      <p>Sign up to get started</p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="logo">🌿 LeafScan</h2>
+        <h1>Create Account</h1>
+        <p>Sign up to get started. Please enter your details.</p>
 
-      <input
-        type="text"
-        placeholder="Enter name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+        {errorMsg && <div className="auth-error-box">{errorMsg}</div>}
 
-      <input
-        type="email"
-        placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <form onSubmit={handleSignup}>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={loading}
+          />
 
-      <input
-        type="password"
-        placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+          />
 
-      <button onClick={handleSignup}>Sign Up</button>
+          <input
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
+          />
 
-      <p>
-        Already have an account?{" "}
-        <span
-          style={{ color: "#4CAF50", cursor: "pointer" }}
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </span>
-      </p>
+          <button className="primary-btn" type="submit" disabled={loading}>
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="signup-text">
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")}>
+            Login
+          </span>
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 }
-
-const styles = {
-  container: {
-    textAlign: "center",
-    marginTop: "60px"
-  },
-
-  input: {
-    display: "block",
-    margin: "10px auto",
-    padding: "10px",
-    width: "250px"
-  },
-
-  button: {
-    padding: "10px 20px",
-    background: "#2e7d32",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer"
-  },
-
-  link: {
-    color: "blue",
-    cursor: "pointer",
-    textDecoration: "underline"
-  }
-}
-
-export default Signup
