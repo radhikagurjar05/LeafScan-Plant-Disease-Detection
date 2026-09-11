@@ -10,31 +10,32 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Load model
-MODEL_PATH = "model.h5"
+import json
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(base_dir, "plant_disease_model.keras")
+classes_path = os.path.join(base_dir, "classes.json")
+info_path = os.path.join(base_dir, "disease_info.json")
 
 if os.path.exists(MODEL_PATH):
-    model = load_model(MODEL_PATH)
+    model = load_model(MODEL_PATH, compile=False)
     print("✅ Model loaded successfully")
 else:
     model = None
     print("❌ Model file not found")
 
-# ✅ Class labels (adjust if needed)
-class_names = [
-    "Leaf Blight",
-    "Powdery Mildew",
-    "Rust",
-    "Healthy"
-]
+try:
+    with open(classes_path, "r") as f:
+        class_indices = json.load(f)
+    classes = {v: k for k, v in class_indices.items()}
+except Exception:
+    classes = {}
 
-# ✅ Treatments
-treatments = {
-    "Leaf Blight": "Use fungicide and remove infected leaves",
-    "Powdery Mildew": "Apply neem oil spray",
-    "Rust": "Use sulfur-based spray",
-    "Healthy": "No treatment needed"
-}
+try:
+    with open(info_path, "r") as f:
+        disease_info = json.load(f)
+except Exception:
+    disease_info = {}
 
 # ================== PREDICT ==================
 @app.route('/predict', methods=['POST'])
@@ -47,44 +48,37 @@ def predict():
         file = request.files['file']
 
         # Save image
-        os.makedirs("uploads", exist_ok=True)
-        filepath = os.path.join("uploads", file.filename)
+        uploads_dir = os.path.join(base_dir, "uploads")
+        os.makedirs(uploads_dir, exist_ok=True)
+        filepath = os.path.join(uploads_dir, file.filename)
         file.save(filepath)
 
         print("📁 File received:", file.filename)
 
-        # ✅ If model exists
-        if model:
+        if model and classes:
+            from tensorflow.keras.applications.efficientnet import preprocess_input
             img = image.load_img(filepath, target_size=(224, 224))
             img_array = image.img_to_array(img)
-
-            # Normalize
-            img_array = img_array / 255.0
+            img_array = preprocess_input(img_array)
             img_array = np.expand_dims(img_array, axis=0)
 
-            # Predict
             predictions = model.predict(img_array)
-
-            print("🔥 Prediction:", predictions)
-
             predicted_index = int(np.argmax(predictions))
-            confidence = float(np.max(predictions))
-
-            predicted_class = class_names[predicted_index]
-
-            # Safety
-            if confidence < 0.01:
-                predicted_class = "Unknown"
-
+            confidence = float(np.max(predictions)) * 100
+            predicted_class = classes.get(predicted_index, "Unknown Disease")
         else:
-            # Fallback if model missing
-            predicted_class = "Leaf Blight"
-            confidence = 0.85
+            predicted_class = "Unknown"
+            confidence = 90.0
+
+        info = disease_info.get(predicted_class, {})
+        display_name = info.get("display_name", predicted_class.replace("_", " ").title())
 
         return jsonify({
-            "disease": predicted_class,
-            "confidence": confidence,
-            "treatment": treatments.get(predicted_class, "N/A")
+            "status": "success",
+            "disease": display_name,
+            "raw_class": predicted_class,
+            "confidence": round(confidence, 2),
+            "treatment": info.get("treatment", "Apply recommended treatment.")
         })
 
     except Exception as e:

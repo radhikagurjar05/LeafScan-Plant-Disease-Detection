@@ -34,6 +34,7 @@ export default function Login() {
       if (res.status === "success") {
         localStorage.setItem("user", res.user.email);
         localStorage.setItem("name", res.user.name);
+        window.dispatchEvent(new Event("authChange"));
         navigate("/");
       } else {
         setErrorMsg(res.message || "Invalid email or password.");

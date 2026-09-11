@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { logout } from "../services/authService";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
+
+  const [user, setUser] = useState(() => localStorage.getItem("user"));
+  const [name, setName] = useState(() => localStorage.getItem("name"));
 
   // Sync dark mode state with document.body class & localStorage
   useEffect(() => {
@@ -19,9 +24,21 @@ export default function Navbar() {
     }
   }, [darkMode]);
 
-  // Get stored values
-  const user = localStorage.getItem("user");
-  const name = localStorage.getItem("name");
+  // Sync user authentication state reactively
+  useEffect(() => {
+    const syncAuth = () => {
+      setUser(localStorage.getItem("user"));
+      setName(localStorage.getItem("name"));
+    };
+
+    syncAuth();
+    window.addEventListener("authChange", syncAuth);
+    window.addEventListener("storage", syncAuth);
+    return () => {
+      window.removeEventListener("authChange", syncAuth);
+      window.removeEventListener("storage", syncAuth);
+    };
+  }, [location]);
 
   // Format name
   const displayName = name
@@ -39,10 +56,11 @@ export default function Navbar() {
     }, 100);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setMenuOpen(false);
-    localStorage.removeItem("user");
-    localStorage.removeItem("name");
+    await logout();
+    setUser(null);
+    setName(null);
     navigate("/login");
   };
 

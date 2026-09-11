@@ -1,43 +1,51 @@
 from flask import Blueprint, request, jsonify
 import sqlite3
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import create_access_token
- 
-print("Auth FILE LOADED")
+import os
+from werkzeug.security import check_password_hash
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(base_dir, "database.db")
+
 auth = Blueprint("auth", __name__)
-bcrypt = Bcrypt()
 
 def get_db():
-    return sqlite3.connect("database.db")
+    return sqlite3.connect(db_path)
+
+def verify_password(stored_password, provided_password):
+    if not stored_password or not provided_password:
+        return False
+    if stored_password.startswith(("scrypt:", "pbkdf2:", "$2b$", "$2a$")):
+        try:
+            return check_password_hash(stored_password, provided_password)
+        except Exception:
+            pass
+    return stored_password == provided_password
 
 @auth.route("/login", methods=["POST"])
 def login():
-    data = request.json
-    email = data.get("email")
-    password = data.get("password")
+    data = request.json or {}
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "").strip()
+
+    if not email or not password:
+        return jsonify({"status": "failed", "message": "Please enter both email and password."}), 400
 
     db = get_db()
     cursor = db.cursor()
 
-    # ✅ DEBUG
-    cursor.execute("SELECT * FROM users")
-    users = cursor.fetchall()
-    print("ALL USERS:", users)
-
-    cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+    cursor.execute("SELECT id, name, email, password FROM users WHERE LOWER(email)=?", (email,))
     user = cursor.fetchone()
-    print("FOUND USER:", user)
+    db.close()
 
     if user:
-        stored_password = user[3]  # ✅ correct index
-        print("STORED HASH:", stored_password)
-
-        if bcrypt.check_password_hash(stored_password, password):
-            print("PASSWORD MATCH ✅")
-            return jsonify({"message": "Login successful"})
+        user_id, user_name, user_email, stored_password = user
+        if verify_password(stored_password, password):
+            return jsonify({
+                "status": "success",
+                "message": "Login successful",
+                "user": {"name": user_name, "email": user_email}
+            })
         else:
-            print("PASSWORD WRONG ❌")
-            return jsonify({"message": "Invalid credentials"})
+            return jsonify({"status": "failed", "message": "Invalid credentials"}), 401
     else:
-        print("USER NOT FOUND ❌")
-        return jsonify({"message": "User not found"})
+        return jsonify({"status": "failed", "message": "User not found"}), 404

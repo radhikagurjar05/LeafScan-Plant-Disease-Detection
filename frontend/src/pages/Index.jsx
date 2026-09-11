@@ -68,8 +68,9 @@ export default function Index() {
         );
       }
     } catch (err) {
-      console.error("ERROR:", err);
-      alert("Prediction failed. Please try again.");
+      console.error("Prediction error:", err);
+      const msg = err.response?.data?.error || "Prediction failed. Please try again.";
+      alert(msg);
     } finally {
       setLoading(false);
     }

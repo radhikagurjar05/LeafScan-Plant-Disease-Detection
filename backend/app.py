@@ -12,6 +12,15 @@ from datetime import datetime, timedelta
 from threading import Lock
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+import sys
+
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 # Load environment variables before reading keys
 load_dotenv()
@@ -21,6 +30,13 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB upload limit
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE,OPTIONS"
+    return response
 
 
 
@@ -51,7 +67,59 @@ def home():
     return render_template('index.html')
 
 
-# ================= LOGIN & SIGNUP =================
+# ================= DATABASE INITIALIZATION =================
+def init_db():
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+        """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_email TEXT NOT NULL,
+            disease TEXT,
+            confidence REAL,
+            image TEXT,
+            date TEXT,
+            FOREIGN KEY (user_email) REFERENCES users(email)
+        )
+        """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS login_attempts (
+            email TEXT PRIMARY KEY,
+            attempts INTEGER DEFAULT 0,
+            locked_until TEXT
+        )
+        """)
+        conn.commit()
+        conn.close()
+        print("[DB] Database initialized successfully!")
+    except Exception as e:
+        print("[DB ERROR] Database initialization error:", e)
+
+init_db()
+
+def verify_password(stored_password, provided_password):
+    if not stored_password or not provided_password:
+        return False
+    # Check if stored_password is a hash
+    if stored_password.startswith(("scrypt:", "pbkdf2:", "$2b$", "$2a$")):
+        try:
+            return check_password_hash(stored_password, provided_password)
+        except Exception:
+            pass
+    # Fallback to plain text match for legacy users
+    return stored_password == provided_password
+
+
+# ================= LOGIN, SIGNUP & LOGOUT =================
 @app.route("/signup", methods=["POST"])
 def signup():
     try:
@@ -66,29 +134,20 @@ def signup():
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
-        # Ensure users table exists
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-        """)
-
         # Check if email is already registered
         cursor.execute("SELECT id FROM users WHERE LOWER(email) = ?", (email,))
         if cursor.fetchone():
             conn.close()
             return jsonify({"status": "failed", "message": "This email is already registered! Please login instead."}), 400
 
+        hashed_password = generate_password_hash(password)
         cursor.execute(
             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            (name, email, password)
+            (name, email, hashed_password)
         )
         conn.commit()
         conn.close()
-        return jsonify({"status": "success", "message": "Signup successful!"})
+        return jsonify({"status": "success", "message": "Signup successful! Please login."})
     except sqlite3.IntegrityError:
         return jsonify({"status": "failed", "message": "This email is already registered! Please login instead."}), 400
     except Exception as e:
@@ -107,24 +166,6 @@ def login():
 
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-
-        # Ensure tables exist
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-        """)
-
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS login_attempts (
-            email TEXT PRIMARY KEY,
-            attempts INTEGER DEFAULT 0,
-            locked_until TEXT
-        )
-        """)
 
         now = datetime.now()
 
@@ -159,7 +200,7 @@ def login():
 
         user_id, user_name, user_email, db_password = user
 
-        if db_password != password:
+        if not verify_password(db_password, password):
             prev_attempts = attempt_row[0] if attempt_row else 0
             new_attempts = prev_attempts + 1
 
@@ -190,7 +231,15 @@ def login():
                     "message": f"Invalid password. {left} attempt(s) remaining before 15-min lockout."
                 }), 401
 
-        # Successful login! Reset login attempts
+        # Successful login! Upgrade plain-text password to hash if needed
+        if not db_password.startswith(("scrypt:", "pbkdf2:", "$2b$", "$2a$")):
+            try:
+                new_hash = generate_password_hash(password)
+                cursor.execute("UPDATE users SET password = ? WHERE id = ?", (new_hash, user_id))
+            except Exception:
+                pass
+
+        # Reset login attempts
         cursor.execute("SELECT email FROM login_attempts WHERE email = ?", (email,))
         if cursor.fetchone():
             cursor.execute("UPDATE login_attempts SET attempts = 0, locked_until = NULL WHERE email = ?", (email,))
@@ -202,10 +251,19 @@ def login():
 
         return jsonify({
             "status": "success",
+            "message": "Login successful",
             "user": {"name": user_name, "email": user_email}
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/logout", methods=["POST", "GET"])
+def logout():
+    return jsonify({
+        "status": "success",
+        "message": "Logged out successfully"
+    })
 
 
 # ================= PREDICT =================
@@ -218,17 +276,24 @@ def predict():
             return jsonify({"error": "No file uploaded"}), 400
 
         # 🔥 Safe filename
-        safe_name = secure_filename(file.filename)
+        safe_name = secure_filename(file.filename or "leaf.jpg")
         ext = os.path.splitext(safe_name)[1].lower()
 
-        if ext == "":
+        if ext not in [".jpg", ".jpeg", ".png", ".webp"]:
             ext = ".jpg"
 
         filename = str(int(datetime.now().timestamp())) + ext
         filepath = os.path.join(static_folder, filename)
 
-        #  Load image from memory first, then save to disk for later display
+        #  Load image bytes and save to disk
         file_bytes = file.read()
+        if not file_bytes:
+            return jsonify({"error": "Uploaded file is empty"}), 400
+
+        with open(filepath, "wb") as f:
+            f.write(file_bytes)
+        print(" Saved:", filepath)
+
         img = Image.open(io.BytesIO(file_bytes)).convert('RGB')
         img = img.resize((224, 224))
         img = np.array(img)
@@ -242,13 +307,10 @@ def predict():
         predicted_index = int(np.argmax(prediction))
         confidence = float(np.max(prediction)) * 100
 
-        #  Save original upload after prediction
-        file.stream.seek(0)
-        file.save(filepath)
-        print(" Saved:", filepath)
+        print(f"Prediction result: index={predicted_index}, confidence={confidence:.2f}%")
 
-        if confidence < 50.0:
-            return jsonify({"error": "Invalid image, not leaf image"})
+        if confidence < 15.0:
+            return jsonify({"error": "Unable to identify leaf clearly. Please upload a clear photo of a plant leaf."})
 
         predicted_class = classes.get(predicted_index, "Unknown Disease")
 
@@ -256,6 +318,7 @@ def predict():
         display_name = info.get("display_name", predicted_class.replace("_", " ").title())
 
         return jsonify({
+            "status": "success",
             "disease": display_name,
             "raw_class": predicted_class,
             "confidence": round(confidence, 2),
@@ -271,7 +334,7 @@ def predict():
 
     except Exception as e:
         print("ERROR:", e)
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 
 # ================= HISTORY =================
@@ -345,7 +408,7 @@ def delete_history(id):
         conn.commit()
         conn.close()
 
-        print("🗑 Deleted ID:", id)
+        print("[HISTORY] Deleted ID:", id)
 
         return jsonify({"message": "Deleted successfully"})
 
